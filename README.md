@@ -12,6 +12,20 @@ Este proyecto implementa algoritmos de búsqueda no informada (BFS y DFS) para e
 - **Nodo**: Estructura auxiliar para representar cada vértice y sus conexiones (no es estrictamente necesaria para el funcionamiento principal).
 - **Utilidades**: Funciones para leer el grafo desde fichero y declarar las funciones de búsqueda detallada.
 
+### Métodos principales
+
+- **Grafo::agregarArista(int origen, int destino, double costo)**: Añade una arista entre dos vértices con el coste indicado.
+- **Grafo::getNumVertices() const**: Devuelve el número de vértices del grafo.
+- **Grafo::obtenerCostoArista(int origen, int destino) const**: Devuelve el coste de la arista entre dos vértices, o -1 si no existe.
+- **Grafo::imprimirAristas() const**: Muestra por pantalla todas las aristas del grafo.
+- **Grafo::busquedaAmplitud(int origen, int destino)**: Realiza búsqueda en amplitud (BFS) y devuelve el camino encontrado como vector de nodos.
+- **Grafo::busquedaProfundidad(int origen, int destino)**: Realiza búsqueda en profundidad (DFS) y devuelve el camino encontrado como vector de nodos.
+- **busquedaAmplitudDetallada(const Grafo&, int, int)**: Realiza BFS y devuelve un resultado detallado con iteraciones, nodos generados, inspeccionados, camino y coste.
+- **busquedaProfundidadDetallada(const Grafo&, int, int)**: Realiza DFS y devuelve un resultado detallado con iteraciones, nodos generados, inspeccionados, camino y coste.
+- **leerGrafo(const std::string& nombreArchivo)**: Lee el grafo desde un fichero en formato compacto y lo construye en memoria.
+
+Cada método está documentado en el código fuente y permite modularidad y reutilización para pruebas o ampliaciones.
+
 ### Formato del fichero de entrada
 
 El fichero debe tener el siguiente formato:
@@ -41,23 +55,3 @@ Donde el primer número es el número de vértices y el resto son los valores de
    ./grafo_program grafo_test.txt 0 3
    ```
 3. El resultado detallado se genera en `output.txt`.
-
-### Preparar el repositorio para GIT
-
-1. Inicializa el repositorio:
-   ```bash
-   git init
-   ```
-2. Añade todos los archivos:
-   ```bash
-   git add .
-   ```
-3. Haz tu primer commit:
-   ```bash
-   git commit -m "Primera versión: BFS y DFS con salida detallada"
-   ```
-4. (Opcional) Añade el remoto y haz push:
-   ```bash
-   git remote add origin <URL_DEL_REPO>
-   git push -u origin main
-   ```
