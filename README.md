@@ -42,7 +42,7 @@ El fichero debe tener el siguiente formato:
 -1
 -1
 ```
-Donde el primer número es el número de vértices y el resto son los valores de la diagonal superior de la matriz de distancias (simétrica, -1 si no hay arista).
+Donde el primer número es el número de vértices y el resto son los valores de las aristas
 
 ### Modo de uso
 
