@@ -55,3 +55,19 @@ Donde el primer número es el número de vértices y el resto son los valores de
    ./grafo_program grafo_test.txt 0 3
    ```
 3. El resultado detallado se genera en `output.txt`.
+
+### Compilación y ejecución con Makefile
+
+1. Compila el programa con:
+   ```bash
+   make
+   ```
+2. Ejecuta el programa indicando el fichero de grafo, el nodo origen y el nodo destino (índices desde 0):
+   ```bash
+   ./grafo_program grafo_test.txt 0 3
+   ```
+3. El resultado detallado se genera en `output.txt`.
+4. Para limpiar los archivos objeto y el ejecutable:
+   ```bash
+   make clean
+   ```
