@@ -5,6 +5,7 @@
 #include <iostream>
 #include <set>
 #include <fstream>
+#include <random>
 using namespace std;
 
 
@@ -27,18 +28,49 @@ std::vector<int> Grafo::busquedaAmplitud(int origen, int destino) {
     std::vector<bool> visitado(numVertices, false);
     std::vector<int> predecesor(numVertices, -1);
     std::queue<int> cola;
-    
-    visitado[origen] = true;
-    cola.push(origen);
-
+    // Elegir nodo aleatorio para la primera iteración
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, numVertices - 1);
+    int nodo_inicial = dis(gen);
+    std::cout << "[BFS] Nodo aleatorio elegido en la primera iteración: " << nodo_inicial+1 << std::endl;
+    visitado[nodo_inicial] = true;
+    cola.push(nodo_inicial);
+    bool primera_iteracion = true;
     while (!cola.empty()) {
         int actual = cola.front();
         cola.pop();
-
+        std::cout << "[BFS] Evaluando nodo: " << actual+1 << std::endl;
+        std::vector<int> hijos;
+        for (const auto& vecino : listaAdyacencia[actual]) {
+            int v = vecino.first;
+            if (!visitado[v]) {
+                hijos.push_back(v);
+            }
+        }
+        if (!hijos.empty()) {
+            std::cout << "[BFS] Hijos de " << actual+1 << ": ";
+            for (size_t i = 0; i < hijos.size(); ++i) {
+                std::cout << hijos[i]+1;
+                if (i+1 < hijos.size()) std::cout << ", ";
+            }
+            std::cout << std::endl;
+        } else {
+            std::cout << "[BFS] El nodo " << actual+1 << " no tiene hijos nuevos." << std::endl;
+        }
+        if (primera_iteracion) {
+            primera_iteracion = false;
+            if (actual == destino) break;
+            if (!visitado[origen]) {
+                visitado[origen] = true;
+                predecesor[origen] = actual;
+                cola.push(origen);
+            }
+            continue;
+        }
         if (actual == destino) {
             break;
         }
-
         for (const auto& vecino : listaAdyacencia[actual]) {
             int v = vecino.first;
             if (!visitado[v]) {
@@ -48,12 +80,10 @@ std::vector<int> Grafo::busquedaAmplitud(int origen, int destino) {
             }
         }
     }
-
     std::vector<int> camino;
     for (int v = destino; v != -1; v = predecesor[v]) {
         camino.push_back(v);
     }
-
     std::reverse(camino.begin(), camino.end());
     return camino;
 }
@@ -63,17 +93,64 @@ std::vector<int> Grafo::busquedaProfundidad(int origen, int destino) {
     std::vector<int> camino;
     std::vector<bool> visitado(numVertices, false);
     std::vector<int> predecesor(numVertices, -1);
-
-    dfsRecursivo(origen, destino, visitado, predecesor);
-
-    if (predecesor[destino] == -1) {
-        return camino;  // Si no se encuentra un camino, devolver vacío
+    // Elegir nodo aleatorio para la primera iteración
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, numVertices - 1);
+    int nodo_inicial = dis(gen);
+    std::cout << "[DFS] Nodo aleatorio elegido en la primera iteración: " << nodo_inicial+1 << std::endl;
+    bool primera_iteracion = true;
+    std::stack<int> pila;
+    pila.push(nodo_inicial);
+    while (!pila.empty()) {
+        int actual = pila.top();
+        pila.pop();
+        std::cout << "[DFS] Evaluando nodo: " << actual+1 << std::endl;
+        std::vector<int> hijos;
+        for (const auto& vecino : listaAdyacencia[actual]) {
+            int v = vecino.first;
+            if (!visitado[v]) {
+                hijos.push_back(v);
+            }
+        }
+        if (!hijos.empty()) {
+            std::cout << "[DFS] Hijos de " << actual+1 << ": ";
+            for (size_t i = 0; i < hijos.size(); ++i) {
+                std::cout << hijos[i]+1;
+                if (i+1 < hijos.size()) std::cout << ", ";
+            }
+            std::cout << std::endl;
+        } else {
+            std::cout << "[DFS] El nodo " << actual+1 << " no tiene hijos nuevos." << std::endl;
+        }
+        if (primera_iteracion) {
+            primera_iteracion = false;
+            if (actual == destino) break;
+            if (!visitado[origen]) {
+                predecesor[origen] = actual;
+                pila.push(origen);
+            }
+            visitado[actual] = true;
+            continue;
+        }
+        if (!visitado[actual]) {
+            visitado[actual] = true;
+            if (actual == destino) break;
+            for (const auto& vecino : listaAdyacencia[actual]) {
+                int v = vecino.first;
+                if (!visitado[v]) {
+                    predecesor[v] = actual;
+                    pila.push(v);
+                }
+            }
+        }
     }
-
+    if (predecesor[destino] == -1 && nodo_inicial != destino) {
+        return camino;
+    }
     for (int v = destino; v != -1; v = predecesor[v]) {
         camino.push_back(v);
     }
-
     std::reverse(camino.begin(), camino.end());
     return camino;
 }
