@@ -2,6 +2,14 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <random>
+
+int nodoAleatorio(int numVertices) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, numVertices - 1);
+    return dis(gen);
+}
 
 Grafo leerGrafo(const std::string& nombreArchivo) {
     std::ifstream archivo(nombreArchivo);

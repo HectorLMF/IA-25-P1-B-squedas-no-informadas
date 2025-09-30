@@ -73,14 +73,15 @@ int main(int argc, char** argv) {
     fout << "Vértice destino: " << (destino+1) << std::endl;
     fout << "---------------------------------------------\n";
     // BFS
-    fout << "BÚSQUEDA EN AMPLITUD (BFS)\n";
+    fout << "BÚSQUEDA EN AMPLITUD (BFS)" << std::endl;
+    fout << "Nodo aleatorio elegido en la primera iteración (por nodoAleatorio): " << (resultadoBFS.nodoAleatorioUsado+1) << std::endl;
     for (size_t i = 0; i < resultadoBFS.iteraciones.size(); ++i) {
         fout << "Iteración " << (i+1) << std::endl;
         fout << "Nodos generados: ";
         bool first = true;
         for (int n : resultadoBFS.iteraciones[i].generados) {
             if (!first) fout << ", ";
-            fout << (n+1);
+            fout << (n);
             first = false;
         }
         fout << std::endl;
@@ -90,7 +91,7 @@ int main(int argc, char** argv) {
             first = true;
             for (int n : resultadoBFS.iteraciones[i].inspeccionados) {
                 if (!first) fout << ", ";
-                fout << (n+1);
+                fout << (n);
                 first = false;
             }
         }
@@ -105,14 +106,15 @@ int main(int argc, char** argv) {
     fout << "Costo: " << std::fixed << std::setprecision(2) << resultadoBFS.costo << std::endl;
     fout << "---------------------------------------------\n";
     // DFS
-    fout << "BÚSQUEDA EN PROFUNDIDAD (DFS)\n";
+    fout << "BÚSQUEDA EN PROFUNDIDAD (DFS)" << std::endl;
+    fout << "Nodo aleatorio elegido en la primera iteración (por nodoAleatorio): " << (resultadoDFS.nodoAleatorioUsado+1) << std::endl;
     for (size_t i = 0; i < resultadoDFS.iteraciones.size(); ++i) {
         fout << "Iteración " << (i+1) << std::endl;
         fout << "Nodos generados: ";
         bool first = true;
         for (int n : resultadoDFS.iteraciones[i].generados) {
             if (!first) fout << ", ";
-            fout << (n+1);
+            fout << (n);
             first = false;
         }
         fout << std::endl;
@@ -122,7 +124,7 @@ int main(int argc, char** argv) {
             first = true;
             for (int n : resultadoDFS.iteraciones[i].inspeccionados) {
                 if (!first) fout << ", ";
-                fout << (n+1);
+                fout << (n);
                 first = false;
             }
         }

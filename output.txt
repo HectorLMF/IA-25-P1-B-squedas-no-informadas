@@ -5,48 +5,42 @@ Vértice origen: 1
 Vértice destino: 4
 ---------------------------------------------
 BÚSQUEDA EN AMPLITUD (BFS)
+Nodo aleatorio elegido en la primera iteración (por nodoAleatorio): 2
 Iteración 1
 Nodos generados: 1
-Nodos inspeccionados: 1
+Nodos inspeccionados: 0, 1
 ---------------------------------------------
 Iteración 2
-Nodos generados: 1, 2, 3
-Nodos inspeccionados: 1, 2
+Nodos generados: 0, 1, 2
+Nodos inspeccionados: 0, 1, 2
 ---------------------------------------------
 Iteración 3
-Nodos generados: 1, 2, 3, 5
-Nodos inspeccionados: 1, 2, 3
+Nodos generados: 0, 1, 2, 3
+Nodos inspeccionados: 0, 1, 2, 3
 ---------------------------------------------
 Iteración 4
-Nodos generados: 1, 2, 3, 4, 5
-Nodos inspeccionados: 1, 2, 3, 5
+Nodos generados: 0, 1, 2, 3
+Nodos inspeccionados: 0, 1, 2, 3
 ---------------------------------------------
-Iteración 5
-Nodos generados: 1, 2, 3, 4, 5
-Nodos inspeccionados: 1, 2, 3, 4, 5
+Camino: 2 - 1 - 3 - 4
 ---------------------------------------------
-Iteración 6
-Nodos generados: 1, 2, 3, 4, 5
-Nodos inspeccionados: 1, 2, 3, 4, 5
----------------------------------------------
-Camino: 1 - 3 - 4
----------------------------------------------
-Costo: 2.00
+Costo: 3.23
 ---------------------------------------------
 BÚSQUEDA EN PROFUNDIDAD (DFS)
+Nodo aleatorio elegido en la primera iteración (por nodoAleatorio): 2
 Iteración 1
 Nodos generados: 1
-Nodos inspeccionados: 1
+Nodos inspeccionados: 0, 1
 ---------------------------------------------
 Iteración 2
-Nodos generados: 1, 2, 3
-Nodos inspeccionados: 1, 3
+Nodos generados: 0, 1, 2
+Nodos inspeccionados: 0, 1, 2
 ---------------------------------------------
 Iteración 3
-Nodos generados: 1, 2, 3, 4
-Nodos inspeccionados: 1, 3
+Nodos generados: 0, 1, 2, 3
+Nodos inspeccionados: 0, 1, 2
 ---------------------------------------------
-Camino: 1 - 3 - 4
+Camino: 2 - 1 - 3 - 4
 ---------------------------------------------
-Costo: 2.00
+Costo: 3.23
 ---------------------------------------------

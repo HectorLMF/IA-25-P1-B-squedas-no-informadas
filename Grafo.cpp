@@ -6,6 +6,7 @@
 #include <set>
 #include <fstream>
 #include <random>
+#include "Utilidades.h"
 using namespace std;
 
 
@@ -28,12 +29,8 @@ std::vector<int> Grafo::busquedaAmplitud(int origen, int destino) {
     std::vector<bool> visitado(numVertices, false);
     std::vector<int> predecesor(numVertices, -1);
     std::queue<int> cola;
-    // Elegir nodo aleatorio para la primera iteración
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(0, numVertices - 1);
-    int nodo_inicial = dis(gen);
-    std::cout << "[BFS] Nodo aleatorio elegido en la primera iteración: " << nodo_inicial+1 << std::endl;
+    int nodo_inicial = nodoAleatorio(numVertices);
+    std::cout << "[BFS] Nodo aleatorio elegido en la primera iteración (por nodoAleatorio): " << nodo_inicial+1 << std::endl;
     visitado[nodo_inicial] = true;
     cola.push(nodo_inicial);
     bool primera_iteracion = true;
@@ -93,12 +90,8 @@ std::vector<int> Grafo::busquedaProfundidad(int origen, int destino) {
     std::vector<int> camino;
     std::vector<bool> visitado(numVertices, false);
     std::vector<int> predecesor(numVertices, -1);
-    // Elegir nodo aleatorio para la primera iteración
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(0, numVertices - 1);
-    int nodo_inicial = dis(gen);
-    std::cout << "[DFS] Nodo aleatorio elegido en la primera iteración: " << nodo_inicial+1 << std::endl;
+    int nodo_inicial = nodoAleatorio(numVertices);
+    std::cout << "[DFS] Nodo aleatorio elegido en la primera iteración (por nodoAleatorio): " << nodo_inicial+1 << std::endl;
     bool primera_iteracion = true;
     std::stack<int> pila;
     pila.push(nodo_inicial);
@@ -200,13 +193,24 @@ ResultadoBusqueda busquedaAmplitudDetallada(const Grafo& grafo, int origen, int 
     std::queue<int> cola;
     std::vector<IteracionBusqueda> iteraciones;
     std::set<int> generados, inspeccionados;
-
-    visitado[origen] = true;
-    cola.push(origen);
-    generados.insert(origen);
-    iteraciones.push_back({generados, {}});
-
     const auto& listaAdyacencia = grafo.getListaAdyacencia();
+    // Elegir aleatoriamente uno de los hijos del nodo origen
+    std::vector<int> hijos;
+    for (const auto& vecino : listaAdyacencia[origen]) {
+        hijos.push_back(vecino.first);
+    }
+    int nodoAleatorioUsado = origen;
+    if (!hijos.empty()) {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dis(0, hijos.size() - 1);
+        nodoAleatorioUsado = hijos[dis(gen)];
+    }
+    visitado[nodoAleatorioUsado] = true;
+    cola.push(nodoAleatorioUsado);
+    generados.insert(nodoAleatorioUsado);
+    iteraciones.push_back({generados, {}});
+    bool primera_iteracion = true;
     while (!cola.empty()) {
         int actual = cola.front();
         cola.pop();
@@ -214,7 +218,17 @@ ResultadoBusqueda busquedaAmplitudDetallada(const Grafo& grafo, int origen, int 
         IteracionBusqueda it = iteraciones.back();
         it.inspeccionados = inspeccionados;
         iteraciones.back() = it;
-
+        if (primera_iteracion) {
+            primera_iteracion = false;
+            if (actual == destino) break;
+            if (!visitado[origen]) {
+                visitado[origen] = true;
+                predecesor[origen] = actual;
+                cola.push(origen);
+                generados.insert(origen);
+            }
+            continue;
+        }
         for (const auto& vecino : listaAdyacencia[actual]) {
             int v = vecino.first;
             if (!visitado[v]) {
@@ -227,15 +241,15 @@ ResultadoBusqueda busquedaAmplitudDetallada(const Grafo& grafo, int origen, int 
         iteraciones.push_back({generados, inspeccionados});
         if (actual == destino) break;
     }
-    // reconstruir camino
     std::vector<int> camino;
     for (int v = destino; v != -1; v = predecesor[v]) camino.push_back(v);
     std::reverse(camino.begin(), camino.end());
-    // calcular costo
     double costo = 0;
-    for (size_t i = 0; i + 1 < camino.size(); ++i)
-        costo += grafo.obtenerCostoArista(camino[i], camino[i + 1]);
-    return {camino, costo, iteraciones};
+    if (!camino.empty()) {
+        for (size_t i = 0; i + 1 < camino.size(); ++i)
+            costo += grafo.obtenerCostoArista(camino[i], camino[i + 1]);
+    }
+    return {camino, costo, iteraciones, nodoAleatorioUsado};
 }
 
 ResultadoBusqueda busquedaProfundidadDetallada(const Grafo& grafo, int origen, int destino) {
@@ -244,12 +258,25 @@ ResultadoBusqueda busquedaProfundidadDetallada(const Grafo& grafo, int origen, i
     std::vector<int> predecesor(n, -1);
     std::vector<IteracionBusqueda> iteraciones;
     std::set<int> generados, inspeccionados;
-    std::stack<int> pila;
-    pila.push(origen);
-    generados.insert(origen);
-    iteraciones.push_back({generados, {}});
     const auto& listaAdyacencia = grafo.getListaAdyacencia();
+    // Elegir aleatoriamente uno de los hijos del nodo origen
+    std::vector<int> hijos;
+    for (const auto& vecino : listaAdyacencia[origen]) {
+        hijos.push_back(vecino.first);
+    }
+    int nodoAleatorioUsado = origen;
+    if (!hijos.empty()) {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dis(0, hijos.size() - 1);
+        nodoAleatorioUsado = hijos[dis(gen)];
+    }
+    std::stack<int> pila;
+    pila.push(nodoAleatorioUsado);
+    generados.insert(nodoAleatorioUsado);
+    iteraciones.push_back({generados, {}});
     bool found = false;
+    bool primera_iteracion = true;
     while (!pila.empty() && !found) {
         int actual = pila.top(); pila.pop();
         if (!visitado[actual]) {
@@ -258,6 +285,16 @@ ResultadoBusqueda busquedaProfundidadDetallada(const Grafo& grafo, int origen, i
             IteracionBusqueda it = iteraciones.back();
             it.inspeccionados = inspeccionados;
             iteraciones.back() = it;
+            if (primera_iteracion) {
+                primera_iteracion = false;
+                if (actual == destino) { found = true; break; }
+                if (!visitado[origen]) {
+                    predecesor[origen] = actual;
+                    pila.push(origen);
+                    generados.insert(origen);
+                }
+                continue;
+            }
             for (const auto& vecino : listaAdyacencia[actual]) {
                 int v = vecino.first;
                 if (!visitado[v]) {
@@ -276,7 +313,9 @@ ResultadoBusqueda busquedaProfundidadDetallada(const Grafo& grafo, int origen, i
         std::reverse(camino.begin(), camino.end());
     }
     double costo = 0;
-    for (size_t i = 0; i + 1 < camino.size(); ++i)
-        costo += grafo.obtenerCostoArista(camino[i], camino[i + 1]);
-    return {camino, costo, iteraciones};
+    if (!camino.empty()) {
+        for (size_t i = 0; i + 1 < camino.size(); ++i)
+            costo += grafo.obtenerCostoArista(camino[i], camino[i + 1]);
+    }
+    return {camino, costo, iteraciones, nodoAleatorioUsado};
 }

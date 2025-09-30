@@ -18,6 +18,7 @@ struct ResultadoBusqueda {
     std::vector<int> camino;
     double costo;
     std::vector<IteracionBusqueda> iteraciones;
+    int nodoAleatorioUsado; // Nuevo campo para guardar el nodo aleatorio usado
 };
 
 class Grafo {
